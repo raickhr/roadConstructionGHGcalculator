@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vehicle Form</title>
+</head>
+<body>
+    <h1>Add a Vehicle</h1>
+    <form th:action="@{/vehicle/add}" th:object="${vehicle}" method="post">
+        <label for="type">Vehicle Type:</label>
+        <input type="text" id="type" th:field="*{type}" />
+        <br />
+        
+        <label for="fuelType">Fuel Type:</label>
+        <input type="text" id="fuelType" th:field="*{fuelType}" />
+        <br />
+        
+        <label for="mpg">MPG:</label>
+        <input type="number" step="0.1" id="mpg" th:field="*{mpg}" />
+        <br />
+        
+        <button type="submit">Add Vehicle</button>
+    </form>
+
+    <h2>Vehicles List</h2>
+    <ul>
+        <li th:each="vehicle : ${vehicleList}">
+            <span th:text="${vehicle.type}"></span> - 
+            <span th:text="${vehicle.fuelType}"></span> - 
+            <span th:text="${vehicle.mpg}"></span>
+        </li>
+    </ul>
+
+    <form th:action="@{/vehicle/done}" method="post">
+        <button type="submit">Save to Excel</button>
+    </form>
+
+    <div th:if="${message != null}">
+        <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error != null}">
+        <p th:text="${error}"></p>
+    </div>
+
+</body>
+</html>

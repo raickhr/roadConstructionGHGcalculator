@@ -1,0 +1,152 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.example:vehicleapp >-----------------------
+[INFO] Building vehicleapp 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.0:clean (default-clean) @ vehicleapp ---
+[INFO] Deleting /Users/shikhar.rai/Downloads/vehicleapp/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ vehicleapp ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 10 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.8.1:compile (default-compile) @ vehicleapp ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /Users/shikhar.rai/Downloads/vehicleapp/target/classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[5,38] cannot access org.springframework.stereotype.Controller
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-context/6.2.2/spring-context-6.2.2.jar(/org/springframework/stereotype/Controller.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[6,30] cannot access org.springframework.ui.Model
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-context/6.2.2/spring-context-6.2.2.jar(/org/springframework/ui/Model.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[8,51] cannot access org.springframework.web.servlet.mvc.support.RedirectAttributes
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-webmvc/6.2.2/spring-webmvc-6.2.2.jar(/org/springframework/web/servlet/mvc/support/RedirectAttributes.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[15,2] cannot find symbol
+  symbol: class Controller
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[16,2] cannot access org.springframework.web.bind.annotation.RequestMapping
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/RequestMapping.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[21,28] cannot find symbol
+  symbol:   class Model
+  location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[28,63] cannot find symbol
+  symbol:   class RedirectAttributes
+  location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[35,31] cannot find symbol
+  symbol:   class RedirectAttributes
+  location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[3,32] cannot access org.springframework.boot.SpringApplication
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/boot/spring-boot/3.4.2/spring-boot-3.4.2.jar(/org/springframework/boot/SpringApplication.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[4,46] cannot access org.springframework.boot.autoconfigure.SpringBootApplication
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.4.2/spring-boot-autoconfigure-3.4.2.jar(/org/springframework/boot/autoconfigure/SpringBootApplication.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[6,2] cannot find symbol
+  symbol: class SpringBootApplication
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[20,6] cannot access org.springframework.web.bind.annotation.GetMapping
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/GetMapping.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[28,31] cannot access org.springframework.web.bind.annotation.ModelAttribute
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/ModelAttribute.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[27,6] cannot access org.springframework.web.bind.annotation.PostMapping
+  bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/PostMapping.class)
+    class file has wrong version 61.0, should be 55.0
+    Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[34,6] cannot find symbol
+  symbol:   class PostMapping
+  location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[63,6] cannot find symbol
+  symbol:   class GetMapping
+  location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[10,17] cannot find symbol
+  symbol:   variable SpringApplication
+  location: class com.example.vehicleapp.VehicleappApplication
+[INFO] 17 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.705 s
+[INFO] Finished at: 2025-02-17T15:06:00-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project vehicleapp: Compilation failure: Compilation failure: 
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[5,38] cannot access org.springframework.stereotype.Controller
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-context/6.2.2/spring-context-6.2.2.jar(/org/springframework/stereotype/Controller.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[6,30] cannot access org.springframework.ui.Model
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-context/6.2.2/spring-context-6.2.2.jar(/org/springframework/ui/Model.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[8,51] cannot access org.springframework.web.servlet.mvc.support.RedirectAttributes
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-webmvc/6.2.2/spring-webmvc-6.2.2.jar(/org/springframework/web/servlet/mvc/support/RedirectAttributes.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[15,2] cannot find symbol
+[ERROR]   symbol: class Controller
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[16,2] cannot access org.springframework.web.bind.annotation.RequestMapping
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/RequestMapping.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[21,28] cannot find symbol
+[ERROR]   symbol:   class Model
+[ERROR]   location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[28,63] cannot find symbol
+[ERROR]   symbol:   class RedirectAttributes
+[ERROR]   location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[35,31] cannot find symbol
+[ERROR]   symbol:   class RedirectAttributes
+[ERROR]   location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[3,32] cannot access org.springframework.boot.SpringApplication
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/boot/spring-boot/3.4.2/spring-boot-3.4.2.jar(/org/springframework/boot/SpringApplication.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[4,46] cannot access org.springframework.boot.autoconfigure.SpringBootApplication
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.4.2/spring-boot-autoconfigure-3.4.2.jar(/org/springframework/boot/autoconfigure/SpringBootApplication.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[6,2] cannot find symbol
+[ERROR]   symbol: class SpringBootApplication
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[20,6] cannot access org.springframework.web.bind.annotation.GetMapping
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/GetMapping.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[28,31] cannot access org.springframework.web.bind.annotation.ModelAttribute
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/ModelAttribute.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[27,6] cannot access org.springframework.web.bind.annotation.PostMapping
+[ERROR]   bad class file: /Users/shikhar.rai/.m2/repository/org/springframework/spring-web/6.2.2/spring-web-6.2.2.jar(/org/springframework/web/bind/annotation/PostMapping.class)
+[ERROR]     class file has wrong version 61.0, should be 55.0
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the classpath.
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[34,6] cannot find symbol
+[ERROR]   symbol:   class PostMapping
+[ERROR]   location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleController.java:[63,6] cannot find symbol
+[ERROR]   symbol:   class GetMapping
+[ERROR]   location: class com.example.vehicleapp.VehicleController
+[ERROR] /Users/shikhar.rai/Downloads/vehicleapp/src/main/java/com/example/vehicleapp/VehicleappApplication.java:[10,17] cannot find symbol
+[ERROR]   symbol:   variable SpringApplication
+[ERROR]   location: class com.example.vehicleapp.VehicleappApplication
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

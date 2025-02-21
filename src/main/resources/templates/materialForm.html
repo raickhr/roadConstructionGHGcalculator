@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Material Entry</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/mainstyles.css"> <!-- 🔹 Local CSS for Header & Body -->
+</head>
+<body class="page-containerColumnwise">
+
+    <!-- 🔹 Header Section (Styled from mainstyles.css) -->
+    <header class="myHeaderStyle">
+        <div class="headerContent">
+            <div class="logo">
+                <img src="/images/logo.jpg" alt="OU logo">
+            </div>
+            <div class="headerTitle">
+                Ohio Research Institute for Transportation and the Environment<br>
+                Road Construction Project GHG Emission Calculator
+            </div>
+        </div>
+    </header>
+
+    <div class="containerForm">
+        <div class="contentHeader">Add Material to Database</div>
+
+        <!-- Success and Error Messages -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+        <!-- Material Form -->
+        <form action="/material/add" method="post" class="d-flex align-items-center gap-3 w-100" th:object="${material}">
+            
+            <!-- Two-column layout for form elements -->
+            <table class="table table-bordered table-striped mt-6 fs-6">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Material ID</th>
+                        <th>Category</th>
+                        <th>Material Name</th>
+                        <th>Unit</th>
+                        <th>CO2 Equivalent (per Unit)</th>
+                        <th>Scope</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="materialId" class="form-control form-control-lg" 
+                            th:field="*{materialId}" required>
+                        </td>
+                        <td>
+                            <select name="category" class="form-select form-select-lg" th:field="*{category}" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option th:each="category : ${categoryOptions}" th:value="${category}" th:text="${category}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="materialName" class="form-control form-control-lg" th:field="*{materialName}" required>
+                        </td>
+                        <td>
+                            <select name="unit" class="form-select form-select-lg" th:field="*{unit}" required>
+                                <option value="" disabled selected>Select Unit</option>
+                                <option th:each="unit : ${unitOptions}" th:value="${unit}" th:text="${unit}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="co2Equivalent" class="form-control form-control-lg" th:field="*{co2Equivalent}" required>
+                        </td>
+                        <td>
+                            <select name="scope" class="form-select form-select-lg" th:field="*{scope}" required>
+                                <option value="" disabled selected>Select Scope</option>
+                                <option value="Scope 1">Scope 1</option>
+                                <option value="Scope 2">Scope 2</option>
+                                <option value="Scope 3">Scope 3</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success btn-lg w-100">Add</button>
+                        </td>
+                        <tr>
+                            <td colspan="6">
+                                <label class="form-label fw-bold fs-6">Remarks:</label>
+                                <input type="text" name="remarks" class="form-control form-control-lg" th:field="*{remarks}">
+                            </td>
+                            <td>
+                                <a href="/site_preparation/site-preparation.html" class="btn btn-secondary btn-lg w-100">Back</a>
+                            </td>
+                        </tr>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+        <hr color="black" width="100%" size="10px">
+        <!-- Filter by Category Form -->
+        <form th:action="@{/material/selectCategoryToShow}" method="post" class="d-flex align-items-center gap-3">
+            <!-- Label -->
+            <label class="form-label fw-bold fs-6 mb-0 me-2" style="min-width: 250px;">Display by Category:</label>
+        
+            <!-- Dropdown -->
+            <select name="categoryToShow" class="form-select form-select-lg flex-grow-1" required>
+                <option value="all" th:selected="${categoryToShow != null} ? ${categoryToShow} == 'all' : false">All Categories</option>
+                <option th:each="category : ${categoryOptions}" 
+                        th:value="${category}" 
+                        th:text="${category}" 
+                        th:selected="${categoryToShow != null} ? ${categoryToShow} == ${category} : false"></option>
+            </select>
+        
+            <!-- Button -->
+            <button type="submit" class="btn btn-success btn-lg">Show</button>
+        </form>
+
+        <!-- Current Entries Section -->
+        <h3 class="mt-5 text-center">Current Entries for [[${categoryToShow != null && !#strings.isEmpty(categoryToShow) ? categoryToShow : 'All'}]]</h3>
+
+        <div class="col-12 text-center mt-4">
+            <table class="table table-bordered table-striped mt-3 fs-6">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Material ID</th>
+                        <th>Category</th>
+                        <th>Material Name</th>
+                        <th>Unit</th>
+                        <th>CO2 Equivalent (per Unit)</th>
+                        <th>Scope</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody th:each="material : ${materialList}">
+                    <!-- Material Data Row -->
+                    <tr>
+                    <!-- </tr> th:if="${categoryToShow} == 'all' or ${categoryToShow} == ${material.category} or ${categoryToShow} == null"> -->
+                        <td th:text="${material.materialId}"></td>
+                        <td th:text="${material.category}"></td>
+                        <td th:text="${material.materialName}"></td>
+                        <td th:text="${material.unit}"></td>
+                        <td th:text="${material.co2Equivalent}"></td>
+                        <td th:text="${material.scope}"></td>
+                        <td>
+                            <!-- Edit Button -->                    
+                            <form th:action="@{'/material/' + ${material.materialId} + '/edit'}" 
+                            method="get" style="display:inline;">
+                                <input type="hidden" name="categoryToShow" th:value="${categoryToShow}" />
+                                <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                            </form>
+
+                            <!-- Show Remark Button -->
+                            <form th:action="@{'/material/' + ${material.materialId} + '/showRemark'}" 
+                            method="post" style="display:inline;">
+                                <input type="hidden" name="categoryToShow" th:value="${categoryToShow}" />
+                                <button type="submit" class="btn btn-info btn-sm">Show Remark</button>
+                            </form>
+                
+                            <!-- Delete Material Button -->
+                            <form th:action="@{'/material/' + ${material.materialId} + '/delete'}" 
+                            method="post" style="display:inline;">
+                                <input type="hidden" name="categoryToShow" th:value="${categoryToShow}" />
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${showRemark} and (${material.materialId} == ${materialIdForRemark})">
+                        <td colspan="7" class="alert alert-success text-center" th:text="${showRemark}"></td>
+                    </tr>  
+
+                    <tr th:if="${isEdit} and (${material.materialId} == ${materialIdForEdit})">
+                        <form th:action="@{'/material/' + ${material.materialId} + '/update' }" 
+                        method="post" class="row g-3" th:object="${material}">
+                        <input type="hidden" name="categoryToShow" th:value="${categoryToShow}" />
+
+                        <!-- Material ID (Disabled when editing) -->
+                        <td>
+                            <input type="text" name="materialId" 
+                            class="form-control form-control-lg" 
+                            th:field="*{materialId}" 
+                            th:disabled="${isEdit}" required>
+                        </td>
+                        <td>
+                            <select name="category" class="form-select form-select-lg" th:field="*{category}" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option th:each="category : ${categoryOptions}" th:value="${category}" th:text="${category}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="materialName" class="form-control form-control-lg" th:field="*{materialName}" required>
+                        </td>
+                        <td>
+                            <select name="unit" class="form-select form-select-lg" th:field="*{unit}" required>
+                                <option value="" disabled selected>Select Unit</option>
+                                <option th:each="unit : ${unitOptions}" th:value="${unit}" th:text="${unit}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="co2Equivalent" class="form-control form-control-lg" th:field="*{co2Equivalent}" required>
+                        </td>
+                        <td>
+                            <select name="scope" class="form-select form-select-lg" th:field="*{scope}" required>
+                                <option value="" disabled selected>Select Scope</option>
+                                <option value="Scope 1">Scope 1</option>
+                                <option value="Scope 2">Scope 2</option>
+                                <option value="Scope 3">Scope 3</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label class="form-label fw-bold fs-6">Remarks:</label>
+                            <input type="text" name="remarks" class="form-control form-control-lg" th:field="*{remarks}">
+                            <button type="submit" class="btn btn-success btn-lg w-100">Update</button>
+                        </td>
+                        </form>
+                    </tr>
+
+                </tbody>   
+                             
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

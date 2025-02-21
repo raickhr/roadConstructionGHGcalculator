@@ -1,0 +1,19 @@
+[ {
+  "siteName" : "Culvert 1 Construction",
+  "tasks" : [ {
+    "taskName" : "Clearing",
+    "listEquipmentUsed" : [ {
+      "equipmentName" : "Compactor",
+      "timeUsedInHours" : 30.0
+    } ],
+    "listMaterialUsed" : [ ]
+  }, {
+    "taskName" : "Compacting",
+    "listEquipmentUsed" : [ ],
+    "listMaterialUsed" : [ ]
+  }, {
+    "taskName" : "Installation",
+    "listEquipmentUsed" : [ ],
+    "listMaterialUsed" : [ ]
+  } ]
+} ]

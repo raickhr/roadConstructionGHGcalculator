@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vehicle Entry</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/mainstyles.css"> <!-- 🔹 Local CSS for Header & Body -->
+</head>
+<body class="page-containerColumnwise">
+
+    <!-- 🔹 Header Section (Styled from mainstyles.css) -->
+    <header class = "myHeaderStyle">
+        <div class="headerContent">
+            <div class="logo">
+                <img src="/images/logo.jpg" alt="OU logo">
+            </div>
+            <div class="headerTitle">
+                Ohio Research Institute for Transportation and the Environment<br>
+                Road Construction Project GHG Emission Calculator
+            </div>
+        </div>
+    </header>
+
+    <div class="containerForm">
+        <div class="contentHeader">Site Preparation and Mobilization</div>
+        <h3>Add Vehicle Details</h3>      
+        
+        <!-- Success and Error Messages -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+        <!-- Vehicle Form -->
+        <form action="/vehicle/add" method="post" class="row g-3" th:object="${vehicle}">
+            <div class="col-12">
+                <label class="form-label fw-bold fs-5">Vehicle Type:</label>
+                <input type="text" name="type" class="form-control form-control-lg" th:field="*{type}" required>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label fw-bold fs-5">Fuel Type:</label>
+                <select name="fuelType" class="form-select form-select-lg" th:field="*{fuelType}" required>
+                    <option value="" disabled selected>Select Fuel Type</option>
+                    <option th:each="fuel : ${fuelTypeOptions}" th:value="${fuel}" th:text="${fuel}"></option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label fw-bold fs-5">Miles Per Gallon (MPG):</label>
+                <input type="number" name="mpg" class="form-control form-control-lg" th:field="*{mpg}" required>
+            </div>
+
+            <!-- Buttons Stack Below Form -->
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Add Next</button>
+            </div>
+        </form>
+
+        <div class="row g-3">
+            <div class="col-12 text-center mt-4">
+                <form action="/vehicle/done" method="post">
+                    <button type="submit" class="btn btn-danger btn-lg">Done</button>
+                </form>
+            </div>
+                
+            <div class="col-12 text-center mt-4">
+                <a href="/site_preparation/site-preparation.html" class="btn btn-secondary btn-lg">Back</a>
+            </div>
+        </div>
+
+        <!-- Current Entries Section -->
+        <h3 class="mt-5 text-center">Current Entries</h3>
+        
+        <div class="col-6 text-center mt-4">
+            <table class="table table-bordered table-striped mt-3 fs-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Vehicle Type</th>
+                        <th>Fuel Type</th>
+                        <th>MPG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="vehicle : ${vehicleList}">
+                        <td th:text="${vehicle.type}"></td>
+                        <td th:text="${vehicle.fuelType}"></td>
+                        <td th:text="${vehicle.mpg}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</body>
+</html>

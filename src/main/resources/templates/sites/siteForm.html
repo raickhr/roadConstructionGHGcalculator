@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Site Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/mainstyles.css"> <!-- Local CSS for Custom Styles -->
+</head>
+<body class="page-containerColumnwise">
+
+    <!-- 🔹 Header Section -->
+    <header class = "myHeaderStyle">
+        <div class="headerContent">
+            <div class="logo">
+                <img src="/images/logo.jpg" alt="Logo">
+            </div>
+            <div class="headerTitle">
+                Ohio Research Institute for Transportation and the Environment<br>
+                Road Construction Project GHG Emission Calculator
+            </div>
+        </div>
+    </header>
+
+    <div th:if="${selectedSite == null}" class="containerForm">
+        <div class="contentHeader">Site Preparation and Mobilization</div>
+        <!-- 🔹 List of Existing Sites -->
+        <h3 class="mt-5 text-center">Existing Sites</h3>
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Site Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="site : ${sites}">
+                    <td th:text="${site.siteName}"></td>
+                    <td>
+                        <a th:href="@{'/sites/' + ${site.siteName}}" class="btn btn-primary btn-sm">Manage Tasks</a>
+                        <form th:action="@{'/sites/' + ${site.siteName} + '/delete'}" 
+                        method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Success and Error Messages -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+        <!-- 🔹 Create Site Form -->
+        <form action="/sites/create" 
+        method="post" 
+        class="row g-3" 
+        th:object="${site}">
+
+            <div class="col-12">
+                <label class="form-label fw-bold fs-4">Site Name:</label>
+                <input type="text" name="siteName" class="form-control form-control-lg" th:field="*{siteName}" required>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Create Site</button>
+            </div>
+        
+        </form>
+
+        <a href="/site_preparation/site-preparation.html" class="btn btn-secondary btn-lg mt-4">Back</a>
+    </div>
+
+    <div th:if="${selectedSite != null && selectedTask == null}" class="containerForm">
+        <div class="contentHeader">Site Preparation and Mobilization</div>
+        <!-- 🔹 List of Existing Tasks -->
+        <h3 class="mt-5 text-center">Existing Tasks for Site [[${selectedSite.siteName}]]</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Task Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${selectedSite.tasks}">
+                    <td th:text="${task.taskName}"></td>
+                    <td>
+                        <a th:href="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${task.taskName} +'/editEquipment'}" 
+                            class="btn btn-warning btn-sm">Manage Equipment</a>
+                        <a th:href="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${task.taskName} + '/editMaterial'}" 
+                            class="btn btn-warning btn-sm">Manage Materials</a>
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${task.taskName} + '/delete'}" 
+                        method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Success and Error Messages -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+        <!-- 🔹 Add Tasks Section -->
+        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/create'}" 
+        class="row g-3" 
+        method="post">
+            <div class="col-12">
+                <label class="form-label fw-bold fs-4">Task Name:</label>
+                <input type="text" name="taskName" class="form-control form-control-lg" required>
+            </div>
+            
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Add Task</button>
+            </div>      
+        </form>
+
+        <a href="/sites/form" class="btn btn-secondary btn-lg mt-4">Back</a>
+    </div>
+
+
+    <div th:if="${editEquipment}" class="containerForm">
+        <div class="contentHeader">Site Preparation and Mobilization</div>
+        <!-- 🔹 Manage Equipment -->
+        <h3 class="mt-5 text-center">Existing Equipment for Site [[${selectedSite.siteName}]] and Task [[${selectedTask.taskName}]]</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Equipment Name</th>
+                    <th>Time Used (hours)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="equipment : ${selectedTask.listEquipmentUsed}">
+                    <td th:text="${equipment.equipmentName}"></td>
+                    <td th:text="${equipment.timeUsedInHours}"></td>
+                    <td>
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/' + ${equipment.equipmentName} + '/delete'}" 
+                        method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <!-- Success and Error Messages -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+    
+        <!-- 🔹 Add Equipment Section -->
+        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/add'}"
+        method="post" class="row g-3" th:object="${equipmentUsed}">
+            <div class="col-12">
+                <label class="form-label fw-bold fs-4">Equipment Name:</label>
+                <input type="text" class="form-control form-control-lg" th:field="*{equipmentName}" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-bold fs-4">Time Used (hours):</label>
+                <input type="number" step="0.1" class="form-control form-control-lg" th:field="*{timeUsedInHours}" required>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Add Equipment</button>
+            </div>
+        </form>
+    
+        <a th:href="@{'/sites/' + ${selectedSite.siteName}}" class="btn btn-secondary btn-lg mt-4">Back</a>
+    </div>
+    
+    <div th:if="${editMaterial}" class="containerForm">
+        <div class="contentHeader">Site Preparation and Mobilization</div>
+        <!-- 🔹 Manage Materials -->
+        <h3 class="mt-5 text-center">Existing Materials for Site [[${selectedSite.siteName}]] and Task [[${selectedTask.taskName}]]</h3>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Material Name</th>
+                    <th>Mass Used (kg)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="material : ${selectedTask.listMaterialUsed}">
+                    <td th:text="${material.materialName}"></td>
+                    <td th:text="${material.massUsedInKg}"></td>
+                    <td>
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/' + ${material.materialName} + '/delete'}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <!-- Success and Error Messages -->
+        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+    
+        <!-- 🔹 Add Material Section -->
+        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/add'}" method="post" class="row g-3" th:object="${materialUsed}">
+            <div class="col-12">
+                <label class="form-label fw-bold fs-4">Material Name:</label>
+                <input type="text" name="materialName" class="form-control form-control-lg" th:field="*{materialName}" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-bold fs-4">Mass Used (kg):</label>
+                <input type="number" step="0.1" class="form-control form-control-lg" th:field="*{massUsedInKg}" required>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Add Material</button>
+            </div>
+        </form>
+    
+        <a th:href="@{'/sites/' + ${selectedSite.siteName}}" class="btn btn-secondary btn-lg mt-4">Back</a>
+    </div>
+    
+</body>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+</html>
