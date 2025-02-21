@@ -129,8 +129,7 @@
                 </thead>
                 <tbody th:each="material : ${materialList}">
                     <!-- Material Data Row -->
-                    <tr>
-                    <!-- </tr> th:if="${categoryToShow} == 'all' or ${categoryToShow} == ${material.category} or ${categoryToShow} == null"> -->
+                    <tr th:attr="id=${material.materialId}">
                         <td th:text="${material.materialId}"></td>
                         <td th:text="${material.category}"></td>
                         <td th:text="${material.materialName}"></td>
@@ -216,6 +215,26 @@
             </table>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Instantly scroll to the element if there's a hash in the URL
+            if (window.location.hash) {
+                var targetElement = document.querySelector(window.location.hash);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+                }
+            }
+    
+            // Instantly scroll to the specific equipment ID if provided by the backend
+            var scrollToId = "[[${scrollToMaterialId}]]";
+            if (scrollToId && scrollToId !== "null") {
+                var element = document.getElementById(scrollToId);
+                if (element) {
+                    element.scrollIntoView({ behavior: "instant", block: "center" });
+                }
+            }
+        });
+    </script>     
 
 </body>
 </html>

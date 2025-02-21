@@ -139,7 +139,9 @@ public class VehicleController {
     }
 
     @GetMapping("/{vehicleId}/edit")
-    public String showEditForm(@PathVariable String vehicleId, Model model, RedirectAttributes redirectAttributes) {
+    public String showEditForm(@PathVariable String vehicleId, 
+                                Model model, 
+                                RedirectAttributes redirectAttributes) {
         loadVehiclesFromExcel();
         Vehicle vehicleToEdit = vehicleSet.stream()
                 .filter(v -> v.getVehicleId().equalsIgnoreCase(vehicleId))
@@ -160,8 +162,9 @@ public class VehicleController {
     }
 
     @PostMapping("/{vehicleId}/update")
-    public String updateVehicle(@PathVariable String vehicleId, @ModelAttribute Vehicle updatedVehicle,
-            RedirectAttributes redirectAttributes) {
+    public String updateVehicle(@PathVariable String vehicleId, 
+                                @ModelAttribute Vehicle updatedVehicle,
+                                RedirectAttributes redirectAttributes) {
         Optional<Vehicle> existingVehicleOptional = vehicleSet.stream()
                 .filter(v -> v.getVehicleId().equalsIgnoreCase(vehicleId))
                 .findFirst();

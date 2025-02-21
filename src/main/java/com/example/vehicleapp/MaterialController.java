@@ -120,7 +120,8 @@ public class MaterialController {
     }
 
     @GetMapping("/form")
-    public String showMaterialForm(Model model, @ModelAttribute("categoryToShow") String categoryToShow) {
+    public String showMaterialForm(Model model, 
+                                   @ModelAttribute("categoryToShow") String categoryToShow) {
         loadMaterialsFromExcel();
         loadCategoryOptionsFromExcel();
         loadUnitOptionsFromExcel();
@@ -195,13 +196,14 @@ public class MaterialController {
         }
 
         // Add the existing material to the model for pre-filling the form
+        model.addAttribute("isEdit", true); // Flag to indicate edit mode
+        model.addAttribute("materialIdForEdit", materialId);
         model.addAttribute("material", materialToEdit);
         model.addAttribute("materialList", filteredMaterials);  // Use filtered list
         model.addAttribute("categoryOptions", categoryOptions);
         model.addAttribute("unitOptions", unitOptions);
-        model.addAttribute("isEdit", true); // Flag to indicate edit mode
-        model.addAttribute("materialIdForEdit", materialId);
         model.addAttribute("categoryToShow", categoryToShow); // Persist the filter
+        model.addAttribute("scrollToMaterialId", materialId); //for scrolling to the location of editing material
         return "materialForm";
     }
 
@@ -236,6 +238,10 @@ public class MaterialController {
 
         // Retain the category filter after updating
         redirectAttributes.addFlashAttribute("categoryToShow", categoryToShow);
+
+        // For retaining the scrolling location
+        redirectAttributes.addFlashAttribute("scrollToMaterialId", materialId);
+
         return "redirect:/material/form";
     }
 
@@ -251,7 +257,12 @@ public class MaterialController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Material not found!");
         }
+
+        // Retain the category filter after deleting
         redirectAttributes.addFlashAttribute("categoryToShow", categoryToShow);
+
+        // For retaining the scrolling location
+        redirectAttributes.addFlashAttribute("scrollToMaterialId", materialId);
         return "redirect:/material/form";
     }
 
@@ -270,7 +281,12 @@ public class MaterialController {
         } else {
             redirectAttributes.addFlashAttribute("error", "Material not found!");
         }
+
+        // Retain the category filter after showing remark
         redirectAttributes.addFlashAttribute("categoryToShow", categoryToShow);
+
+        // For retaining the scrolling location
+        redirectAttributes.addFlashAttribute("scrollToMaterialId", materialId);
         return "redirect:/material/form";
     }
 

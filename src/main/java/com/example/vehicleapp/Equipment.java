@@ -6,9 +6,9 @@ public class Equipment {
     private String equipmentId;
     private String category;
     private String name;
-    private String type;
     private String fuelType;
-    private double consumptionPerHour;
+    private double fuelConsumptionRate;
+    private String fuelConsumptionRateUnits;
     private String remarks;
 
     // Getters and setters with cleaning logic
@@ -36,12 +36,12 @@ public class Equipment {
         this.name = (name != null) ? name.trim() : null;
     }
 
-    public String getType() {
-        return type;
+    public String getFuelConsumptionRateUnits() {
+        return fuelConsumptionRateUnits;
     }
 
-    public void setType(String type) {
-        this.type = (type != null) ? type.trim().toLowerCase() : null;
+    public void setFuelConsumptionRateUnits(String fuelConsumptionRateUnits) {
+        this.fuelConsumptionRateUnits = (fuelConsumptionRateUnits != null) ? fuelConsumptionRateUnits.trim().toLowerCase() : null;
     }
 
     public String getFuelType() {
@@ -52,12 +52,12 @@ public class Equipment {
         this.fuelType = (fuelType != null) ? fuelType.trim().toLowerCase() : null;
     }
 
-    public double getConsumptionPerHour() {
-        return consumptionPerHour;
+    public double getFuelConsumptionRate() {
+        return fuelConsumptionRate;
     }
 
-    public void setConsumptionPerHour(double consumptionPerHour) {
-        this.consumptionPerHour = consumptionPerHour;
+    public void setFuelConsumptionRate(double fuelConsumptionRate) {
+        this.fuelConsumptionRate = fuelConsumptionRate;
     }
 
     public String getRemarks() {
@@ -88,9 +88,9 @@ public class Equipment {
                 "equipmentId='" + equipmentId + '\'' +
                 ", category='" + category + '\'' +
                 ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
                 ", fuelType='" + fuelType + '\'' +
-                ", consumptionPerHour=" + consumptionPerHour +
+                ", fuelConsumptionRate=" + fuelConsumptionRate +
+                ", fuelConsumptionRateUnits='" + fuelConsumptionRateUnits + '\'' +
                 ", remarks='" + remarks + '\'' +
                 '}';
     }
