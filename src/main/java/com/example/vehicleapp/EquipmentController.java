@@ -39,6 +39,11 @@ public class EquipmentController {
                 equipment.setRemarks(row.getCell(6) != null ? row.getCell(6).getStringCellValue().trim() : "");
                 equipmentSet.add(equipment);
             }
+            // Sort equipmentSet by name after loading
+            List<Equipment> sortedEquipment = new ArrayList<>(equipmentSet);
+            sortedEquipment.sort(Comparator.comparing(Equipment::getEquipmentId, String.CASE_INSENSITIVE_ORDER));
+            equipmentSet.clear();
+            equipmentSet.addAll(sortedEquipment);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,7 +149,13 @@ public class EquipmentController {
             // If 'All' is selected or no category selected, show all equipments
             filteredEquipments = new ArrayList<>(equipmentSet);
         }
-
+        // Sort filteredEquipmens by ID after loading
+        // Sort equipmentSet by ID after loading
+        List<Equipment> sortedEquipment = new ArrayList<>(filteredEquipments);
+        sortedEquipment.sort(Comparator.comparing(Equipment::getEquipmentId, String.CASE_INSENSITIVE_ORDER));
+        filteredEquipments.clear();
+        filteredEquipments.addAll(sortedEquipment);
+        
         model.addAttribute("equipment", new Equipment());
         model.addAttribute("equipmentList", filteredEquipments);
         model.addAttribute("fuelList", fuelList);

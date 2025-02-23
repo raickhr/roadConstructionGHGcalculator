@@ -43,6 +43,11 @@ public class MaterialController {
                 material.setRemarks(row.getCell(6) != null ? row.getCell(6).getStringCellValue().trim() : "");
                 materialSet.add(material);
             }
+            // Sort materialSet by name after loading
+            List<Material> sortedMaterials = new ArrayList<>(materialSet);
+            sortedMaterials.sort(Comparator.comparing(Material::getMaterialId, String.CASE_INSENSITIVE_ORDER));
+            materialSet.clear();
+            materialSet.addAll(sortedMaterials);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,6 +144,11 @@ public class MaterialController {
             // If 'All' is selected or no category selected, show all materials
             filteredMaterials = new ArrayList<>(materialSet);
         }
+        // Sort materialSet by name after loading
+        List<Material> sortedMaterials = new ArrayList<>(filteredMaterials);
+        sortedMaterials.sort(Comparator.comparing(Material::getMaterialId, String.CASE_INSENSITIVE_ORDER));
+        filteredMaterials.clear();
+        filteredMaterials.addAll(sortedMaterials);
 
         model.addAttribute("material", new Material());
         model.addAttribute("materialList", filteredMaterials);

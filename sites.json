@@ -3,30 +3,30 @@
   "tasks" : [ {
     "taskName" : "Clearing",
     "listEquipmentUsed" : [ {
+      "equipmentName" : "EQ089:Trimble Model-972 Excavator Type-3",
+      "timeUsedInHours" : 30.0
+    }, {
       "equipmentName" : "EQ098:John Deere Model-667 Bulldozer Type-3",
-      "timeUsedInHours" : 20.0
+      "timeUsedInHours" : 30.0
     }, {
       "equipmentName" : "EQ184:Bobcat Model-602 Asphalt Paver Type-1",
       "timeUsedInHours" : 50.0
-    }, {
-      "equipmentName" : "EQ089:Trimble Model-972 Excavator Type-3",
-      "timeUsedInHours" : 30.0
     } ],
     "listMaterialUsed" : [ {
+      "materialName" : "MAT0200:Reinforcing Steel Bars (Rebar) (Thickness: 4.7 mm)",
+      "unitsUsed" : 50.0,
+      "unit" : "pound"
+    }, {
       "materialName" : "MAT0204:Plastic Pipes (Diameter: 839mm, Thickness: 16mm)",
       "unitsUsed" : 55.0,
       "unit" : "meter"
     }, {
+      "materialName" : "MAT0441:Air-Entraining Agents  (Batch 9)",
+      "unitsUsed" : 35.0,
+      "unit" : "pound"
+    }, {
       "materialName" : "MAT0687:Portland Cement  (Batch 32)",
       "unitsUsed" : 60.0,
-      "unit" : "pound"
-    }, {
-      "materialName" : "MAT0441:Air-Entraining Agents  (Batch 9)",
-      "unitsUsed" : 30.0,
-      "unit" : "pound"
-    }, {
-      "materialName" : "MAT0200:Reinforcing Steel Bars (Rebar) (Thickness: 4.7 mm)",
-      "unitsUsed" : 50.0,
       "unit" : "pound"
     } ]
   } ]

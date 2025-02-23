@@ -34,30 +34,51 @@ public class SiteController {
     private List<Sites> readSites() {
         File file = new File(FILE_PATH);
         
-        // If file doesn't exist or is empty, initialize an empty list
         if (!file.exists() || file.length() == 0) {
             return new ArrayList<>();
         }
     
         try {
-            return objectMapper.readValue(file, new TypeReference<List<Sites>>() {});
+            List<Sites> sites = objectMapper.readValue(file, new TypeReference<List<Sites>>() {});
+            sortAll(sites); // Sort sites, tasks, materials, and equipment after reading
+            return sites;
         } catch (IOException e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
-    }    
+    }
+    
+
 
     // Write data to sites.json
     private void writeSites(List<Sites> sites) {
+        sortAll(sites); // Sort before saving
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), sites);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
-    
 
+    //Sorting the data
+    private void sortAll(List<Sites> sites) {
+        // Sort sites by site name
+        sites.sort(Comparator.comparing(Sites::getSiteName, String.CASE_INSENSITIVE_ORDER));
+    
+        for (Sites site : sites) {
+            // Sort tasks by task name
+            site.getTasks().sort(Comparator.comparing(Task::getTaskName, String.CASE_INSENSITIVE_ORDER));
+    
+            for (Task task : site.getTasks()) {
+                // Sort materials by material name
+                task.getListMaterialUsed().sort(Comparator.comparing(MaterialUsed::getMaterialName, String.CASE_INSENSITIVE_ORDER));
+    
+                // Sort equipment by equipment name
+                task.getListEquipmentUsed().sort(Comparator.comparing(EquipmentUsed::getEquipmentName, String.CASE_INSENSITIVE_ORDER));
+            }
+        }
+    }
+    
     // ****************** SITE MANAGEMENT ******************
 
     // Show the site form with all existing sites
@@ -221,6 +242,11 @@ public class SiteController {
                 equipment.setRemarks(row.getCell(6) != null ? row.getCell(6).getStringCellValue().trim() : "");
                 equipmentSet.add(equipment);
             }
+            // Sort equipmentSet by ID after loading
+            List<Equipment> sortedEquipment = new ArrayList<>(equipmentSet);
+            sortedEquipment.sort(Comparator.comparing(Equipment::getEquipmentId, String.CASE_INSENSITIVE_ORDER));
+            equipmentSet.clear();
+            equipmentSet.addAll(sortedEquipment);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -376,9 +402,14 @@ public class SiteController {
                 material.setRemarks(row.getCell(6) != null ? row.getCell(6).getStringCellValue().trim() : "");
                 materialSet.add(material);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            // Sort materialSet by ID after loading
+            List<Material> sortedMaterials = new ArrayList<>(materialSet);
+            sortedMaterials.sort(Comparator.comparing(Material::getMaterialId, String.CASE_INSENSITIVE_ORDER));
+            materialSet.clear();
+            materialSet.addAll(sortedMaterials);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     // Dynamic Material Search Endpoint
