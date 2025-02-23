@@ -226,6 +226,21 @@ public class SiteController {
         }
     }
 
+    // Dynamic Eqiupment Search Endpoint
+    @GetMapping("/equipment/search")
+    @ResponseBody
+    public ResponseEntity<List<Equipment>> searchEquipment(@RequestParam("query") String query) {
+        List<Equipment> matchingEquipments = new ArrayList<>();
+        for (Equipment equipment : equipmentSet) {
+            if (equipment.getName().toLowerCase().contains(query.toLowerCase()) ||
+                equipment.getEquipmentId().toLowerCase().contains(query.toLowerCase()) ||
+                equipment.getCategory().toLowerCase().contains(query.toLowerCase())) {
+                matchingEquipments.add(equipment);
+            }
+        }
+        return ResponseEntity.ok(matchingEquipments);
+    }
+
 
     // Add Equipment to a Task in a Site
     @PostMapping("/{siteName}/tasks/{taskName}/equipment/add")
@@ -270,6 +285,74 @@ public class SiteController {
         }
         return "redirect:/sites/form";
     }
+
+    // Edit Material Entry
+    @PostMapping("/{siteName}/tasks/{taskName}/equipment/{equipmentName}/edit")
+    public String editEquipment(@PathVariable String siteName, 
+                                @PathVariable String taskName,
+                                @PathVariable String equipmentName,
+                                Model model) {
+        List<Sites> sites = readSites();
+        for (Sites site : sites) {
+            if (site.getSiteName().equalsIgnoreCase(siteName)) {
+                for (Task task : site.getTasks()) {
+                    if (task.getTaskName().equalsIgnoreCase(taskName)) {
+                        for (EquipmentUsed equipment : task.getListEquipmentUsed()) {
+                            if (equipment.getEquipmentName().equalsIgnoreCase(equipmentName)) {
+                                // Pass material for editing
+                                model.addAttribute("editEquipment", true);
+                                model.addAttribute("selectedSite", site);
+                                model.addAttribute("selectedTask", task);
+
+                                model.addAttribute("isEquipmentUsedEdit", true);
+                                model.addAttribute("equipmentUsedNameForEdit", equipmentName);
+                                model.addAttribute("equipmentUsed", equipment);
+                                return "sites/siteForm"; // Direct rendering without redirection
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "redirect:/sites/form";
+    }
+
+
+    // Update Material Entry after editing
+    @PostMapping("/{siteName}/tasks/{taskName}/equipment/{equipmentUsedName}/update")
+    public String updateEqiupment(@PathVariable String siteName, 
+                                 @PathVariable String taskName,
+                                 @PathVariable String equipmentUsedName,
+                                 @ModelAttribute EquipmentUsed updatedEquipment,
+                                 RedirectAttributes redirectAttributes) {
+        List<Sites> sites = readSites();
+        for (Sites site : sites) {
+            if (site.getSiteName().equalsIgnoreCase(siteName)) {
+                for (Task task : site.getTasks()) {
+                    if (task.getTaskName().equalsIgnoreCase(taskName)) {
+                        for (EquipmentUsed existingEquipment : task.getListEquipmentUsed()) {
+                            if (existingEquipment.getEquipmentName().equalsIgnoreCase(equipmentUsedName)) {
+                                // Remove the old equipment
+                                task.removeEquipmentUsed(equipmentUsedName);
+
+                                // Preserve original equpment name
+                                updatedEquipment.setEquipmentName(existingEquipment.getEquipmentName());
+                                // updatedEquipment.setUnit(existingEquipment.getUnit());
+
+                                // Add updated material back to the list
+                                task.addEquipmentUsed(updatedEquipment);
+                                writeSites(sites);
+
+                                redirectAttributes.addFlashAttribute("message", "Equipment updated successfully!");
+                                return "redirect:/sites/" + siteName + "/tasks/" + taskName + "/editEquipment";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "redirect:/sites/form";
+    } 
 
     // ****************** MATERIAL MANAGEMENT ******************
 

@@ -150,17 +150,43 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="equipment : ${selectedTask.listEquipmentUsed}">
-                    <td th:text="${equipment.equipmentName}"></td>
-                    <td th:text="${equipment.timeUsedInHours}"></td>
+            <tbody th:each="equipmentUsed : ${selectedTask.listEquipmentUsed}">
+                <tr>
+                    <td th:text="${equipmentUsed.equipmentName}"></td>
+                    <td th:text="${equipmentUsed.timeUsedInHours}"></td>
                     <td>
-                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/' + ${equipment.equipmentName} + '/delete'}" 
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/' + ${equipmentUsed.equipmentName} + '/edit'}" 
+                        method="post" 
+                        style="display:inline;">
+                            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                        </form>
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/' + ${equipmentUsed.equipmentName} + '/delete'}" 
                         method="post" style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
+                <tr th:if="${isEquipmentUsedEdit} and (${equipmentUsed.equipmentName} == ${equipmentUsedNameForEdit})">
+                    <!-- Inline form for editing material -->
+                    <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/' + ${equipmentUsedNameForEdit} + '/update'}"
+                          method="post"
+                          class="row g-3"
+                          th:object="${equipmentUsed}">
+                        <td>
+                            <input type="text" name="equipmentName"
+                                   class="form-control form-control-lg"
+                                   th:field="*{equipmentName}" readonly required>
+                        </td>
+                        <td>
+                            <input type="number" step="0.1"
+                                   class="form-control form-control-lg"
+                                   th:field="*{timeUsedInHours}" required>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success btn-lg">Update</button>
+                        </td>
+                    </form>
+                </tr> 
             </tbody>
         </table>
     
@@ -172,8 +198,15 @@
         <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/equipment/add'}"
         method="post" class="row g-3" th:object="${equipmentUsed}">
             <div class="col-12">
-                <label class="form-label fw-bold fs-4">Equipment Name:</label>
-                <input type="text" class="form-control form-control-lg" th:field="*{equipmentName}" required>
+                <div class="col-12 position-relative">
+                    <label class="form-label fw-bold fs-4">Equipment Name:</label>
+                    <input type="text" name="equipmentName" 
+                            id="selectedEquipmentInput"  
+                            class="form-control form-control-lg" 
+                            placeholder="Search and Select Equipment"
+                            th:field="*{equipmentName}" required>
+                    <ul id="equipmentSuggestions" class="list-group mt-2"></ul>
+                </div>
             </div>
             <div class="col-12">
                 <label class="form-label fw-bold fs-4">Time Used (hours):</label>
@@ -257,17 +290,6 @@
         <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
         <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
 
-
-        <!-- 🔍 Search Material by Name, ID or Category -->
-        <!-- <div class="position-relative" style="width: 100%;">
-            <input type="text" id="materialSearchInput" 
-                   class="form-control form-control-lg" 
-                   placeholder="Search by Material Name, ID, or Category">
-            <ul id="materialSuggestions" class="list-group mt-2"></ul>
-        </div>
-     -->
-
-        <!-- 🔹 Add Material Section (Form Submission) -->
         <!-- 🔹 Add Material Section (Form Submission) -->
         <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/add'}" 
         method="post" 
@@ -307,65 +329,73 @@
     <!-- ✅ JavaScript for Selecting Material from Suggestions -->
     <script>
         $(document).ready(function () {
-        // Event Listener for Material Search Input
-        $('#selectedMaterialInput').on('input', function () {
-            let query = $(this).val();
-            let suggestions = $('#materialSuggestions');
-
-            if (query.length > 0) {
-                $.get('/sites/materials/search', { query: query }, function (data) {
-                    suggestions.empty(); // Clear previous suggestions
-                    if (data.length > 0) {
-                        data.forEach(function (material) {
-                            suggestions.append(
-                                '<li class="list-group-item suggestion-item" ' +
-                                'data-material-name="' + material.materialId + ':' + material.materialName + '" ' +
-                                'data-unit="' + material.unit + '">' +
-                                material.materialName + ' (' + material.materialId + ') - ' + material.category +
-                                '</li>'
-                            );
+            // Generic search handler for both material and equipment
+            function handleSearch(inputSelector, suggestionSelector, endpoint, onSelectCallback) {
+                $(inputSelector).on('input', function () {
+                    let query = $(this).val();
+                    let suggestions = $(suggestionSelector);
+    
+                    if (query.length > 0) {
+                        $.get(endpoint, { query: query }, function (data) {
+                            suggestions.empty();
+                            if (data.length > 0) {
+                                data.forEach(function (item) {
+                                    suggestions.append(
+                                        '<li class="list-group-item suggestion-item" ' +
+                                        'data-id="' + (item.materialId || item.equipmentId) + '" ' +
+                                        'data-name="' + (item.materialName || item.name) + '" ' +
+                                        'data-unit="' + (item.unit || '') + '">' +
+                                        (item.materialName || item.name) + ' (' + (item.materialId || item.equipmentId) + ') - ' + item.category +
+                                        '</li>'
+                                    );
+                                });
+                                suggestions.show();
+                            } else {
+                                suggestions.hide();
+                            }
                         });
-                        suggestions.show(); // Display dropdown
                     } else {
-                        suggestions.hide(); // Hide dropdown if no results
+                        suggestions.hide();
                     }
                 });
-            } else {
-                suggestions.hide(); // Hide dropdown when input is cleared
+    
+                // Event Listener for Selecting an Item from Suggestions
+                $(document).on('click', suggestionSelector + ' .suggestion-item', function (event) {
+                    event.stopPropagation();
+                    let selectedId = $(this).data('id');
+                    let selectedName = $(this).data('name');
+                    let selectedUnit = $(this).data('unit');
+    
+                    // Save in ID:Name format
+                    let fullName = `${selectedId}:${selectedName}`;
+    
+                    onSelectCallback(fullName, selectedUnit);
+    
+                    suggestions = $(suggestionSelector);
+                    suggestions.hide().empty();
+                    $(inputSelector).blur();
+                });
+    
+                // Close suggestions when clicking outside
+                $(document).on('click', function (event) {
+                    if (!$(event.target).closest(inputSelector + ', ' + suggestionSelector).length) {
+                        $(suggestionSelector).hide();
+                    }
+                });
             }
+    
+            // Material search handling with ID:Name format
+            handleSearch('#selectedMaterialInput', '#materialSuggestions', '/sites/materials/search', function (fullName, unit) {
+                $('#selectedMaterialInput').val(fullName); // Save in format materialId:materialName
+                $('#unitInput').val(unit); // Populate unit input
+            });
+    
+            // Equipment search handling with ID:Name format
+            handleSearch('#selectedEquipmentInput', '#equipmentSuggestions', '/sites/equipment/search', function (fullName) {
+                $('#selectedEquipmentInput').val(fullName); // Save in format equipmentId:equipmentName
+            });
         });
-
-        // Event Listener for Hover Effect (Highlight on Mouseover)
-        $(document).on('mouseenter', '.suggestion-item', function () {
-            $('.suggestion-item').removeClass('active'); // Remove highlight from others
-            $(this).addClass('active'); // Highlight the hovered element
-        });
-
-        // Event Listener for Selecting a Material from Suggestions
-        $(document).on('click', '.suggestion-item', function (event) {
-            event.stopPropagation(); // Prevent other click events from firing
-            let selectedMaterial = $(this).data('material-name');
-            let selectedUnit = $(this).data('unit'); // Get the unit from data attribute
-
-            // Populate the form inputs with the selected values
-            $('#selectedMaterialInput').val(selectedMaterial); // Populate material name input
-            $('#unitInput').val(selectedUnit); // Populate the unit input field
-
-            // Hide and clear suggestions
-            $('#materialSuggestions').hide();
-            $('#materialSuggestions').empty();
-            $('#selectedMaterialInput').blur(); // Remove focus from input field
-        });
-
-        // Close dropdown suggestions when clicking outside
-        $(document).on('click', function (event) {
-            if (!$(event.target).closest('#selectedMaterialInput, #materialSuggestions').length) {
-                $('#materialSuggestions').hide();
-            }
-        });
-    });
-
-    </script>            
+    </script>             
 </body>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 </html>
