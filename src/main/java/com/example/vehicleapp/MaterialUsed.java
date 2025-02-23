@@ -6,13 +6,24 @@ import java.io.Serializable;
 
 public class MaterialUsed implements Serializable {
     private String materialName;
-    private Double massUsedInKg;
+    private Double unitsUsed; // Represents how much material was used
+    private String unit;      // Represents the unit measurement for the material (e.g., kg, meters)
 
     // Constructor for JSON Deserialization
     @JsonCreator
-    public MaterialUsed(@JsonProperty("materialName") String name, @JsonProperty("massUsedInKg") double massUsed) {
-        this.materialName = name;
-        this.massUsedInKg = massUsed;
+    public MaterialUsed(@JsonProperty("materialName") String materialName, 
+                        @JsonProperty("unitsUsed") Double unitsUsed,
+                        @JsonProperty("unit") String unit) {
+        this.materialName = materialName;
+        this.unitsUsed = unitsUsed;
+        this.unit = unit;
+    }
+
+    // Default constructor (important for Spring & Thymeleaf)
+    public MaterialUsed() {
+        this.materialName = "";
+        this.unitsUsed = 0.0;
+        this.unit = "";
     }
 
     // Getters and Setters
@@ -20,29 +31,33 @@ public class MaterialUsed implements Serializable {
         return materialName;
     }
 
-    public double getMassUsedInKg() {
-        return massUsedInKg;
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
     }
 
-    public void setMaterialName(String name) {
-        this.materialName = name;
+    public Double getUnitsUsed() {
+        return unitsUsed;
     }
 
-    public void setMassUsedInKg(double massUsed) {
-        this.massUsedInKg = massUsed;
+    public void setUnitsUsed(Double unitsUsed) {
+        this.unitsUsed = unitsUsed;
     }
 
-    // Default constructor (important for Spring & Thymeleaf)
-    public MaterialUsed() {
-        this.materialName = "";
-        this.massUsedInKg = 0.0;  
+    public String getUnit() {
+        return unit;
     }
-    
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     // Display Material Info
     @Override
     public String toString() {
-        return "MaterialUsed{name='" + materialName + "', massUsed=" + massUsedInKg + " kg}";
+        return "MaterialUsed{" +
+                "materialName='" + materialName + '\'' +
+                ", unitsUsed=" + unitsUsed +
+                ", unit=" + unit +
+                '}';
     }
-
-    
 }

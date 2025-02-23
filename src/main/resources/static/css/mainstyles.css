@@ -186,7 +186,77 @@ button:hover {
     margin-bottom: 15px;
 }
 
+#materialSuggestions {
+    display: none; /* Hidden by default */
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    width: 100%;
+    border: 1px solid #ccc;
+    list-style-type: none; /* Removes default bullet points */
+    padding: 0; /* Removes padding that might cause layout issues */
+    margin: 0; /* Removes default margin causing extra space */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds subtle shadow */
+}
+
+/* Highlight hovered suggestion */
+.suggestion-item:hover, .suggestion-item.active {
+    background-color: #8fa5bc;
+    color: white;
+}
+
+
+/* Centered alert message */
+.floating-alert {
+    position: fixed; /* Stays in place while scrolling */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust to perfectly center */
+    z-index: 9999; /* On top of all other elements */
+    width: 50%;
+    text-align: center;
+    display: none; /* Hidden by default */
+    opacity: 1; /* Fully visible */
+    transition: opacity 2s ease-in-out; /* Smooth fade-out transition */
+}
+
+/* Success message styling */
+.floating-alert-success {
+    display: block; /* Make visible */
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeOut 3s forwards; /* Trigger fade after 1s + 2s fade time */
+}
+
+/* Error message styling */
+.floating-alert-error {
+    display: block; /* Make visible */
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeOut 3s forwards; /* Trigger fade after 1s + 2s fade time */
+}
+
 /* Media Queries */
+/* Fade-out animation */
+@keyframes fadeOut {
+    0% {
+        opacity: 1; /* Fully visible */
+    }
+    83% {
+        opacity: 0.7; /* Stay 70% visible until 1 seconds */
+    }
+    100% {
+        opacity: 0; /* Fully transparent after 3 seconds total */
+    }
+}
 
 /* For devices with a width of 1024px or smaller */
 @media (max-width: 1024px) {

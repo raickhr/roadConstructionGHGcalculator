@@ -77,7 +77,7 @@ public class Task implements Serializable {
     }
 
     public void removeMaterialUsed(String materialName) {
-        listMaterialUsed.removeIf(material -> material.getMaterialName().equalsIgnoreCase(materialName));
+        listMaterialUsed.removeIf(material -> material.getMaterialName().equalsIgnoreCase(materialName.trim()));
     }
 
     public void editNameOfMaterialUsed(String oldName, String newName) {
@@ -89,10 +89,13 @@ public class Task implements Serializable {
         }
     }
 
-    public void editMassUsedOfMaterialUsed(String materialName, double newMassUsed) {
+    public void editMassUsedOfMaterialUsed(String materialName, 
+                                           double newUnitsUsed,
+                                           String newUnit ) {
         for (MaterialUsed material : listMaterialUsed) {
             if (material.getMaterialName().equalsIgnoreCase(materialName)) {
-                material.setMassUsedInKg(newMassUsed);
+                material.setUnitsUsed(newUnitsUsed);
+                material.setUnit(newUnit);
                 return;
             }
         }

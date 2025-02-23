@@ -4,6 +4,7 @@
     <title>Site Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/mainstyles.css"> <!-- Local CSS for Custom Styles -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="page-containerColumnwise">
 
@@ -19,6 +20,12 @@
             </div>
         </div>
     </header>
+
+    <!--  
+    
+    SITES MAIN PART
+    
+    -->
 
     <div th:if="${selectedSite == null}" class="containerForm">
         <div class="contentHeader">Site Preparation and Mobilization</div>
@@ -68,6 +75,12 @@
         <a href="/site_preparation/site-preparation.html" class="btn btn-secondary btn-lg mt-4">Back</a>
     </div>
 
+    <!--  
+    
+    TASK MANAGEMENT
+    
+    -->
+
     <div th:if="${selectedSite != null && selectedTask == null}" class="containerForm">
         <div class="contentHeader">Site Preparation and Mobilization</div>
         <!-- 🔹 List of Existing Tasks -->
@@ -95,6 +108,7 @@
                 </tr>
             </tbody>
         </table>
+
         <!-- Success and Error Messages -->
         <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
         <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
@@ -117,6 +131,13 @@
     </div>
 
 
+    <!--  
+    
+    EQUIPMENT MANAGEMENT
+    
+    -->
+
+ 
     <div th:if="${editEquipment}" class="containerForm">
         <div class="contentHeader">Site Preparation and Mobilization</div>
         <!-- 🔹 Manage Equipment -->
@@ -166,6 +187,12 @@
         <a th:href="@{'/sites/' + ${selectedSite.siteName}}" class="btn btn-secondary btn-lg mt-4">Back</a>
     </div>
     
+    <!--  
+    
+    MATERIAL MANAGEMENT
+    
+    -->
+
     <div th:if="${editMaterial}" class="containerForm">
         <div class="contentHeader">Site Preparation and Mobilization</div>
         <!-- 🔹 Manage Materials -->
@@ -174,45 +201,171 @@
             <thead class="table-dark">
                 <tr>
                     <th>Material Name</th>
-                    <th>Mass Used (kg)</th>
+                    <th>Units Used</th>
+                    <th>Unit</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="material : ${selectedTask.listMaterialUsed}">
-                    <td th:text="${material.materialName}"></td>
-                    <td th:text="${material.massUsedInKg}"></td>
+            <tbody th:each="materialUsed : ${selectedTask.listMaterialUsed}">
+                <tr>
+                    <td th:text="${materialUsed.materialName}"></td>
+                    <td th:text="${materialUsed.unitsUsed}"></td>
+                    <td th:text="${materialUsed.unit}"></td>
                     <td>
-                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/' + ${material.materialName} + '/delete'}" method="post" style="display:inline;">
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/' + ${materialUsed.materialName} + '/edit'}" 
+                        method="post" 
+                        style="display:inline;">
+                            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                        </form>
+                        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/' + ${materialUsed.materialName} + '/delete'}" 
+                        method="post" 
+                        style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
+                <tr th:if="${isMaterialUsedEdit} and (${materialUsed.materialName} == ${materialUsedNameForEdit})">
+                    <!-- Inline form for editing material -->
+                    <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/' + ${materialUsedNameForEdit} + '/update'}"
+                          method="post"
+                          class="row g-3"
+                          th:object="${materialUsed}">
+                        <td>
+                            <input type="text" name="materialName"
+                                   class="form-control form-control-lg"
+                                   th:field="*{materialName}" readonly required>
+                        </td>
+                        <td>
+                            <input type="number" step="0.1"
+                                   class="form-control form-control-lg"
+                                   th:field="*{unitsUsed}" required>
+                        </td>
+                        <td>
+                            <input type="text" name="unit"
+                                   class="form-control form-control-lg"
+                                   th:field="*{unit}" readonly required>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success btn-lg">Update</button>
+                        </td>
+                    </form>
+                </tr>                                             
             </tbody>
         </table>
     
         <!-- Success and Error Messages -->
         <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
         <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
-    
-        <!-- 🔹 Add Material Section -->
-        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/add'}" method="post" class="row g-3" th:object="${materialUsed}">
-            <div class="col-12">
-                <label class="form-label fw-bold fs-4">Material Name:</label>
-                <input type="text" name="materialName" class="form-control form-control-lg" th:field="*{materialName}" required>
-            </div>
-            <div class="col-12">
-                <label class="form-label fw-bold fs-4">Mass Used (kg):</label>
-                <input type="number" step="0.1" class="form-control form-control-lg" th:field="*{massUsedInKg}" required>
-            </div>
-            <div class="col-12 text-center mt-4">
-                <button type="submit" class="btn btn-success btn-lg">Add Material</button>
-            </div>
+
+
+        <!-- 🔍 Search Material by Name, ID or Category -->
+        <!-- <div class="position-relative" style="width: 100%;">
+            <input type="text" id="materialSearchInput" 
+                   class="form-control form-control-lg" 
+                   placeholder="Search by Material Name, ID, or Category">
+            <ul id="materialSuggestions" class="list-group mt-2"></ul>
+        </div>
+     -->
+
+        <!-- 🔹 Add Material Section (Form Submission) -->
+        <!-- 🔹 Add Material Section (Form Submission) -->
+        <form th:action="@{'/sites/' + ${selectedSite.siteName} + '/tasks/' + ${selectedTask.taskName} + '/materials/add'}" 
+        method="post" 
+        class="row g-3" 
+        th:object="${materialUsed}">
+        <div class="col-12 position-relative">
+        <label class="form-label fw-bold fs-4">Material Name:</label>
+        <input type="text" name="materialName" 
+                id="selectedMaterialInput"  
+                class="form-control form-control-lg" 
+                placeholder="Search and Select Material"
+                th:field="*{materialName}" required>
+        <ul id="materialSuggestions" class="list-group mt-2"></ul>
+        </div>
+        <div class="col-12">
+        <label class="form-label fw-bold fs-4">Units Used:</label>
+        <input type="number" step="0.1" 
+                class="form-control form-control-lg" 
+                th:field="*{unitsUsed}" required>
+        </div>
+        <div class="col-12">
+        <label class="form-label fw-bold fs-4">Unit:</label>
+        <input type="text" name="unit" 
+                id="unitInput"  
+                class="form-control form-control-lg" 
+                th:field="*{unit}" required readonly>
+        </div>
+        <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-success btn-lg">Add Material</button>
+        </div>
         </form>
+
+
     
         <a th:href="@{'/sites/' + ${selectedSite.siteName}}" class="btn btn-secondary btn-lg mt-4">Back</a>
     </div>
-    
+    <!-- ✅ JavaScript for Selecting Material from Suggestions -->
+    <script>
+        $(document).ready(function () {
+        // Event Listener for Material Search Input
+        $('#selectedMaterialInput').on('input', function () {
+            let query = $(this).val();
+            let suggestions = $('#materialSuggestions');
+
+            if (query.length > 0) {
+                $.get('/sites/materials/search', { query: query }, function (data) {
+                    suggestions.empty(); // Clear previous suggestions
+                    if (data.length > 0) {
+                        data.forEach(function (material) {
+                            suggestions.append(
+                                '<li class="list-group-item suggestion-item" ' +
+                                'data-material-name="' + material.materialId + ':' + material.materialName + '" ' +
+                                'data-unit="' + material.unit + '">' +
+                                material.materialName + ' (' + material.materialId + ') - ' + material.category +
+                                '</li>'
+                            );
+                        });
+                        suggestions.show(); // Display dropdown
+                    } else {
+                        suggestions.hide(); // Hide dropdown if no results
+                    }
+                });
+            } else {
+                suggestions.hide(); // Hide dropdown when input is cleared
+            }
+        });
+
+        // Event Listener for Hover Effect (Highlight on Mouseover)
+        $(document).on('mouseenter', '.suggestion-item', function () {
+            $('.suggestion-item').removeClass('active'); // Remove highlight from others
+            $(this).addClass('active'); // Highlight the hovered element
+        });
+
+        // Event Listener for Selecting a Material from Suggestions
+        $(document).on('click', '.suggestion-item', function (event) {
+            event.stopPropagation(); // Prevent other click events from firing
+            let selectedMaterial = $(this).data('material-name');
+            let selectedUnit = $(this).data('unit'); // Get the unit from data attribute
+
+            // Populate the form inputs with the selected values
+            $('#selectedMaterialInput').val(selectedMaterial); // Populate material name input
+            $('#unitInput').val(selectedUnit); // Populate the unit input field
+
+            // Hide and clear suggestions
+            $('#materialSuggestions').hide();
+            $('#materialSuggestions').empty();
+            $('#selectedMaterialInput').blur(); // Remove focus from input field
+        });
+
+        // Close dropdown suggestions when clicking outside
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('#selectedMaterialInput, #materialSuggestions').length) {
+                $('#materialSuggestions').hide();
+            }
+        });
+    });
+
+    </script>            
 </body>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
 </html>

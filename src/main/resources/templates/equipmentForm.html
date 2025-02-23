@@ -22,8 +22,11 @@
 
     <div class="containerForm">
         <div class="contentHeader">Add Equipment to Database</div>
-        <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
-        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+        <div th:if="${message}" class="floating-alert floating-alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="floating-alert floating-alert-error" th:text="${error}"></div>
+
+        <!-- <div th:if="${message}" class="alert alert-success text-center" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div> -->
 
         <!-- Form to add new equipment entries -->
         <form action="/equipment/add" method="post" th:object="${equipment}" class="w-100">

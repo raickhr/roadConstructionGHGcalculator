@@ -1,19 +1,24 @@
 [ {
-  "siteName" : "Culvert 1 Construction",
+  "siteName" : "Storage Area 1",
   "tasks" : [ {
     "taskName" : "Clearing",
-    "listEquipmentUsed" : [ {
-      "equipmentName" : "Compactor",
-      "timeUsedInHours" : 30.0
-    } ],
-    "listMaterialUsed" : [ ]
-  }, {
-    "taskName" : "Compacting",
     "listEquipmentUsed" : [ ],
-    "listMaterialUsed" : [ ]
-  }, {
-    "taskName" : "Installation",
-    "listEquipmentUsed" : [ ],
-    "listMaterialUsed" : [ ]
+    "listMaterialUsed" : [ {
+      "materialName" : "MAT0204:Plastic Pipes (Diameter: 839mm, Thickness: 16mm)",
+      "unitsUsed" : 55.0,
+      "unit" : "meter"
+    }, {
+      "materialName" : "MAT0687:Portland Cement  (Batch 32)",
+      "unitsUsed" : 60.0,
+      "unit" : "pound"
+    }, {
+      "materialName" : "MAT0441:Air-Entraining Agents  (Batch 9)",
+      "unitsUsed" : 50.0,
+      "unit" : "pound"
+    }, {
+      "materialName" : "MAT0444:Crushed Stone  (Batch 25)",
+      "unitsUsed" : 300.0,
+      "unit" : "cubic meter"
+    } ]
   } ]
 } ]
