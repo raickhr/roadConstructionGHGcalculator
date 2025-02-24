@@ -8,7 +8,7 @@
     <style>
         /* Override grid layout for this page */
         .container {
-            grid-template-columns: repeat(5, 1fr); /* 3 equal-width columns */
+            grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
         }
     </style>
 </head>
@@ -37,11 +37,20 @@
         <!-- Top row -->
         <div class="contentHeader">Pavement Construction</div>
 
-        <div class="column">Column 1</div>
-        <div class="column">Column 2</div>
-        <div class="column">Column 3</div>
-        <div class="column">Column 4</div>
-        <div class="column">Column 5</div>
+        <div class="column">
+            <div class="column-header">Pavement Construction Recommendations Based On Design Parameters</div>
+            <div class="button-group">
+                <button class="myButtonClass" onclick="window.location.href='';">Build Pavement Construction Task Item Recommendations</button>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="column-header">Pavement Construction Tasks</div>
+            <div class="button-group">
+                <button class="myButtonClass" onclick="window.location.href='';">Build/Edit Pavement Construction Task Item</button>
+            </div>
+        </div>
+        
     </div>
 
     
